@@ -61,17 +61,45 @@
   onScroll();
 })();
 
-/* ---------- Live Minuteur (SF countdown with jump event) ---------- */
+/* ---------- Live Minuteur (real-time, persisted countdown to next jump) ---------- */
 (function () {
   const el = document.getElementById('minuteur-time');
   if (!el) return;
 
-  // Starting time (visible on load, decrements in real time)
-  let total = 2 * 86400 + 10 * 3600 + 34 * 60 + 29;
-  let worldCount = 1;
+  // Persistent state across reloads
+  const TARGET_KEY = 'virusbus.jumpTarget';
+  const COUNT_KEY = 'virusbus.worldCount';
+
+  function randomJumpMs() {
+    // Between 12h and 3 days
+    return (12 * 3600 + Math.floor(Math.random() * (3 * 86400 - 12 * 3600))) * 1000;
+  }
+
+  function getTarget() {
+    const raw = localStorage.getItem(TARGET_KEY);
+    const t = raw ? parseInt(raw, 10) : NaN;
+    if (!isFinite(t) || t < Date.now() - 86400 * 1000) {
+      // No target yet, or very stale (>1 day past)
+      const fresh = Date.now() + (2 * 86400 + 10 * 3600 + 34 * 60 + 29) * 1000;
+      localStorage.setItem(TARGET_KEY, String(fresh));
+      return fresh;
+    }
+    return t;
+  }
+
+  function getCount() {
+    const n = parseInt(localStorage.getItem(COUNT_KEY) || '1', 10);
+    return isFinite(n) && n >= 1 ? n : 1;
+  }
+  function setCount(n) { localStorage.setItem(COUNT_KEY, String(n)); }
+
+  let target = getTarget();
+  let worldCount = getCount();
 
   function pad(n, w = 2) { return String(n).padStart(w, '0'); }
   function render() {
+    const diffMs = Math.max(0, target - Date.now());
+    const total = Math.floor(diffMs / 1000);
     const d = Math.floor(total / 86400);
     const h = Math.floor((total % 86400) / 3600);
     const m = Math.floor((total % 3600) / 60);
@@ -79,41 +107,31 @@
     el.textContent = `${pad(d)}:${pad(h)}:${pad(m)}:${pad(s)}`;
   }
 
-  // Flash overlay element (inserted once)
+  // Overlay elements (shared)
   const flash = document.createElement('div');
   flash.className = 'vortex-flash';
   document.body.appendChild(flash);
-
   const jumpMsg = document.createElement('div');
   jumpMsg.className = 'jump-msg';
   document.body.appendChild(jumpMsg);
 
   function triggerJump() {
     worldCount += 1;
-    // Flash
-    flash.classList.remove('on');
-    void flash.offsetWidth; // restart animation
-    flash.classList.add('on');
-    // Message
+    setCount(worldCount);
+    target = Date.now() + randomJumpMs();
+    localStorage.setItem(TARGET_KEY, String(target));
+
+    flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
     jumpMsg.textContent = `SAUT ↗ MONDE N°${worldCount}`;
-    jumpMsg.classList.remove('on');
-    void jumpMsg.offsetWidth;
-    jumpMsg.classList.add('on');
-    // Subtle page shake on hero
+    jumpMsg.classList.remove('on'); void jumpMsg.offsetWidth; jumpMsg.classList.add('on');
+
     const hero = document.querySelector('.hero');
-    if (hero) {
-      hero.classList.add('shake');
-      setTimeout(() => hero.classList.remove('shake'), 700);
-    }
-    // New random countdown: 12h - 3 days
-    total = 12 * 3600 + Math.floor(Math.random() * (3 * 86400 - 12 * 3600));
+    if (hero) { hero.classList.add('shake'); setTimeout(() => hero.classList.remove('shake'), 700); }
   }
 
   render();
   setInterval(() => {
-    total -= 1;
-    if (total <= 0) {
-      total = 0;
+    if (Date.now() >= target) {
       render();
       triggerJump();
     } else {
@@ -121,12 +139,17 @@
     }
   }, 1000);
 
-  // Easter egg: click the minuteur to force a jump (for testing / fun)
+  // Easter egg: click the minuteur to force a jump
   el.style.cursor = 'none';
   el.addEventListener('click', () => {
-    total = 0;
+    target = Date.now();
     render();
     triggerJump();
+  });
+
+  // When tab is refocused, re-sync immediately (clock may have ticked while idle)
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) render();
   });
 })();
 
