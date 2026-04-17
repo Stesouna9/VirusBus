@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Samples voix — Virus Bus</title>
+  <link rel="stylesheet" href="./css/main.css" />
+  <style>
+    body { cursor: auto; padding: 4rem 2rem; }
+    .sample { max-width: 680px; margin: 0 auto 2rem; padding: 2rem; background: var(--surface); border: 1px solid var(--line); }
+    .sample h3 { margin-bottom: 0.5rem; }
+    .sample .meta { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-mute); margin-bottom: 1rem; }
+    audio { width: 100%; }
+    .intro { max-width: 680px; margin: 0 auto 3rem; text-align: center; }
+    .note { max-width: 680px; margin: 0 auto; padding: 2rem; background: rgba(79,168,255,0.08); border: 1px solid var(--accent); font-family: var(--serif-read); font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="intro">
+    <span class="eyebrow">Comparatif voix</span>
+    <h2 style="margin-top: 1.5rem;">Lesquelles préfères-tu ?</h2>
+    <p style="color: var(--text-mute); margin-top: 1rem;">Mêmes 2 phrases sur 4 voix macOS. Écoute et dis-moi la moins pire — ou va direct à la dernière section pour le vrai upgrade.</p>
+  </div>
+
+  <div class="sample">
+    <h3>Sandy</h3>
+    <div class="meta">Féminine · macOS</div>
+    <audio controls src="./assets/audio/samples/sample_Sandy.m4a"></audio>
+  </div>
+
+  <div class="sample">
+    <h3>Shelley</h3>
+    <div class="meta">Féminine · macOS</div>
+    <audio controls src="./assets/audio/samples/sample_Shelley.m4a"></audio>
+  </div>
+
+  <div class="sample">
+    <h3>Flo</h3>
+    <div class="meta">Féminine · macOS</div>
+    <audio controls src="./assets/audio/samples/sample_Flo.m4a"></audio>
+  </div>
+
+  <div class="sample">
+    <h3>Thomas</h3>
+    <div class="meta">Masculine · macOS (référence qualité basique)</div>
+    <audio controls src="./assets/audio/samples/sample_Thomas.m4a"></audio>
+  </div>
+
+  <div class="note">
+    <strong style="color: var(--accent);">Si les 4 te semblent moches</strong> (très probable) — c'est normal, ce sont les voix Apple de base. Pour une qualité <em>audiobook pro</em>, on passe sur <strong>ElevenLabs</strong> : voix féminine française indistinguable d'une vraie narratrice. Dis-moi et je te guide pour la clé API (30 secondes à créer, free tier dispo).
+  </div>
+</body>
+</html>
