@@ -439,19 +439,30 @@ section { position: relative; padding: 10rem 0; }
   z-index: 3;
   padding: 1.8rem 1.5rem;
 }
-.perso-name {
+.perso-first {
   font-family: var(--serif-display);
-  font-weight: 400;
-  font-size: 1.55rem;
-  margin-bottom: 0.3rem;
-  letter-spacing: -0.01em;
+  font-weight: 300;
+  font-size: 1.7rem;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.perso-last {
+  font-family: var(--serif-display);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 1.7rem;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin-bottom: 0.7rem;
 }
 .perso-role {
   font-family: var(--mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.25em;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--text-mute);
 }
 .perso-desc {
   font-family: var(--serif-read);
@@ -651,25 +662,15 @@ section { position: relative; padding: 10rem 0; }
   min-width: 60px;
   text-align: center;
 }
-.player .scrubber {
-  width: 180px;
-  height: 4px;
-  background: var(--line-strong);
-  border-radius: 100px;
-  cursor: none;
-  overflow: hidden;
+.player .wave-container {
+  width: 260px;
+  height: 40px;
   position: relative;
-  transition: height 0.2s ease;
+  cursor: none;
 }
-.player .scrubber:hover { height: 6px; }
-.player .scrub-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent-deep), var(--accent));
-  width: 0;
-  border-radius: 100px;
-  transition: width 0.1s linear;
-  box-shadow: 0 0 8px var(--accent-glow);
-}
+@media (max-width: 900px) { .player .wave-container { width: 180px; } }
+.player .wave-container canvas { display: block; }
+.player .wave-container > div { cursor: none !important; }
 .player .waveform {
   display: flex;
   align-items: center;

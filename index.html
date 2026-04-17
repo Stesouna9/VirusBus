@@ -7,6 +7,11 @@
   <meta name="description" content="Virus Bus — un roman-série de science-fiction. Quatre passagers, un bus, des mondes parallèles. Un objet, un minuteur, et une entité qui les traque : le Conduit." />
   <meta name="theme-color" content="#050810" />
   <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.css" />
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
 </head>
 <body>
 
@@ -94,8 +99,9 @@
       <article class="perso-card reveal">
         <img src="./assets/img/personnages/gabriel.jpg" alt="Gabriel Janvier" />
         <div class="perso-info">
+          <div class="perso-first">Gabriel</div>
+          <div class="perso-last">Janvier</div>
           <div class="perso-role">32 ans · Le rêveur</div>
-          <div class="perso-name">Gabriel Janvier</div>
           <div class="perso-desc">Pudique, observateur. L'objet qu'Elisa lui a donné ce matin-là a déclenché la fusion. Il porte un secret qu'il ne connaît pas encore.</div>
         </div>
       </article>
@@ -103,8 +109,9 @@
       <article class="perso-card reveal">
         <img src="./assets/img/personnages/daniel.jpg" alt="Daniel Jasner" />
         <div class="perso-info">
+          <div class="perso-first">Daniel</div>
+          <div class="perso-last">Jasner</div>
           <div class="perso-role">44 ans · Le physicien</div>
-          <div class="perso-name">Daniel Jasner</div>
           <div class="perso-desc">Spécialiste des systèmes quantiques. Son appareil expérimental a fusionné avec l'objet de Gabriel. Il cherche la logique derrière le chaos.</div>
         </div>
       </article>
@@ -112,8 +119,9 @@
       <article class="perso-card reveal">
         <img src="./assets/img/personnages/solange.jpg" alt="Solange Rocheval" />
         <div class="perso-info">
+          <div class="perso-first">Solange</div>
+          <div class="perso-last">Rocheval</div>
           <div class="perso-role">35 ans · La commandante</div>
-          <div class="perso-name">Solange Rocheval</div>
           <div class="perso-desc">Officière militaire, seule survivante de son monde. Protectrice, forte, pudique sur ses émotions. Aucune variante d'elle n'existe dans d'autres univers.</div>
         </div>
       </article>
@@ -121,8 +129,9 @@
       <article class="perso-card reveal">
         <img src="./assets/img/personnages/lara.jpg" alt="Lara Rivolet" />
         <div class="perso-info">
+          <div class="perso-first">Lara</div>
+          <div class="perso-last">Rivolet</div>
           <div class="perso-role">29 ans · La biologiste</div>
-          <div class="perso-name">Lara Rivolet</div>
           <div class="perso-desc">Douce, intuitive. Elle porte le poids d'un frère disparu. Elle rejoint le bus malgré elle, mais ne panique pas : elle observe.</div>
         </div>
       </article>
@@ -176,5 +185,6 @@
 
 <script src="./js/vortex.js"></script>
 <script src="./js/ambient.js"></script>
+<script src="./js/enhance.js"></script>
 </body>
 </html>
