@@ -11,19 +11,63 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Virus Bus" />
   <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.css" integrity="sha384-6z/M4zCNHzM59q8BnJ1btvx5I7ArdKNNBgb/V4m7ZTUPI4e2SVF0o5IQAGCO414a" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.css" integrity="sha384-V5OsPSFodnBRCYBtnEg3ev1+LQOkFten8615zdwqP2wu+El8Pv32hvKtvJxmkfIo" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" integrity="sha384-tKsJDT6PlUI0pSBt9/sBKJluKgA19/a6mBrDsZaXotLB4ZYfMGM6xt6/WgGpYhTm" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" integrity="sha384-taxnKSnzdVS5gZB4jZcieFZlmBPQMFqhdEmCScZsrIFCxX8Zizq4fKJJH5kBwMXT" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js" integrity="sha384-gn0Nvz5sDelmG/fg9DRAf4gHYvWzEBqhT2E/jAz5ruZJtQR7+HTiqHRo0X4Dnubp" crossorigin="anonymous" defer></script>
   <script type="importmap">
   {
     "imports": {
       "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
     }
+  }
+  </script>
+  <!-- OpenGraph + Twitter cards -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content="Virus Bus" />
+  <meta property="og:url" content="https://virusbus.fr/" />
+  <meta property="og:title" content="Virus Bus — Roman-série SF" />
+  <meta property="og:description" content="Un mardi ordinaire. Un bus. Quatre passagers. Des mondes parallèles. Roman-série de science-fiction à lire et écouter gratuitement." />
+  <meta property="og:image" content="https://virusbus.fr/assets/img/og-card.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Virus Bus — Roman-série SF" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Virus Bus — Roman-série SF" />
+  <meta name="twitter:description" content="Un mardi ordinaire. Un bus. Quatre passagers. Des mondes parallèles. Roman-série de science-fiction à lire et écouter gratuitement." />
+  <meta name="twitter:image" content="https://virusbus.fr/assets/img/og-card.jpg" />
+  <link rel="canonical" href="https://virusbus.fr/" />
+
+  <!-- Schema.org JSON-LD: Book / CreativeWorkSeries -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWorkSeries",
+    "name": "Virus Bus",
+    "alternateName": "Virus Bus — roman-série SF",
+    "description": "Roman-série de science-fiction française. Quatre passagers, un bus, des mondes parallèles.",
+    "genre": ["Science Fiction", "Aventure"],
+    "inLanguage": "fr",
+    "url": "https://virusbus.fr/",
+    "image": "https://virusbus.fr/assets/img/og-card.jpg",
+    "numberOfSeasons": 4,
+    "numberOfEpisodes": 40,
+    "author": {
+      "@type": "Person",
+      "name": "Doc Laundal",
+      "affiliation": { "@type": "Organization", "name": "OKALAM Studio" }
+    },
+    "publisher": { "@type": "Organization", "name": "OKALAM Studio" },
+    "hasPart": [
+      { "@type": "CreativeWork", "name": "E01 — Virus", "url": "https://virusbus.fr/episodes/episode-01.html" },
+      { "@type": "CreativeWork", "name": "E02 — Bus", "url": "https://virusbus.fr/episodes/episode-02.html" },
+      { "@type": "CreativeWork", "name": "E03 — Un monde d'ego", "url": "https://virusbus.fr/episodes/episode-03.html" }
+    ]
   }
   </script>
 </head>
@@ -95,7 +139,7 @@
         </p>
       </div>
       <div class="concept-visual reveal">
-        <img src="./assets/img/univers/bus.jpg" alt="Le bus" />
+        <picture><source srcset="./assets/img/univers/bus.webp" type="image/webp"><img alt="Le bus" loading="lazy" src="./assets/img/univers/bus.jpg" /></picture>
       </div>
     </div>
   </div>
@@ -114,7 +158,7 @@
         <div class="atropos-scale">
           <div class="atropos-rotate">
             <div class="atropos-inner">
-              <img src="./assets/img/personnages/gabriel.jpg" alt="Gabriel Janvier" data-atropos-offset="-4" />
+              <picture><source srcset="./assets/img/personnages/gabriel.webp" type="image/webp"><img alt="Gabriel Janvier" data-atropos-offset="-4" loading="lazy" src="./assets/img/personnages/gabriel.jpg" /></picture>
               <div class="perso-info" data-atropos-offset="6">
                 <div class="perso-first">Gabriel</div>
                 <div class="perso-last">Janvier</div>
@@ -130,7 +174,7 @@
         <div class="atropos-scale">
           <div class="atropos-rotate">
             <div class="atropos-inner">
-              <img src="./assets/img/personnages/daniel.jpg" alt="Daniel Jasner" data-atropos-offset="-4" />
+              <picture><source srcset="./assets/img/personnages/daniel.webp" type="image/webp"><img alt="Daniel Jasner" data-atropos-offset="-4" loading="lazy" src="./assets/img/personnages/daniel.jpg" /></picture>
               <div class="perso-info" data-atropos-offset="6">
                 <div class="perso-first">Daniel</div>
                 <div class="perso-last">Jasner</div>
@@ -146,7 +190,7 @@
         <div class="atropos-scale">
           <div class="atropos-rotate">
             <div class="atropos-inner">
-              <img src="./assets/img/personnages/solange.jpg" alt="Solange Rocheval" data-atropos-offset="-4" />
+              <picture><source srcset="./assets/img/personnages/solange.webp" type="image/webp"><img alt="Solange Rocheval" data-atropos-offset="-4" loading="lazy" src="./assets/img/personnages/solange.jpg" /></picture>
               <div class="perso-info" data-atropos-offset="6">
                 <div class="perso-first">Solange</div>
                 <div class="perso-last">Rocheval</div>
@@ -162,7 +206,7 @@
         <div class="atropos-scale">
           <div class="atropos-rotate">
             <div class="atropos-inner">
-              <img src="./assets/img/personnages/lara.jpg" alt="Lara Rivolet" data-atropos-offset="-4" />
+              <picture><source srcset="./assets/img/personnages/lara.webp" type="image/webp"><img alt="Lara Rivolet" data-atropos-offset="-4" loading="lazy" src="./assets/img/personnages/lara.jpg" /></picture>
               <div class="perso-info" data-atropos-offset="6">
                 <div class="perso-first">Lara</div>
                 <div class="perso-last">Rivolet</div>
@@ -502,6 +546,12 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+<!-- Analytics (GoatCounter — gratuit, RGPD-friendly, pas de cookie).
+     À activer: crée un compte gratuit sur https://www.goatcounter.com
+     puis remplace YOUR_CODE par ton code (ex: "virusbus").
+     Tant que c'est YOUR_CODE, le script ne fait rien (404 silencieux). -->
+<script data-goatcounter="https://YOUR_CODE.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 <script src="./js/transitions.js" defer></script>
 </body>
 </html>
