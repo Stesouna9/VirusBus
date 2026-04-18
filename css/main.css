@@ -1134,7 +1134,18 @@ section { position: relative; padding: 10rem 0; }
   .nav { padding: 1rem 1.2rem; }
   .nav-links { display: none; }
   section { padding: 6rem 0; }
-  .hero-bottom { display: none; }
+  /* Minuteur visible sur mobile, scroll-hint caché, layout en colonne */
+  .hero-bottom {
+    padding: 0 1.2rem;
+    bottom: 1.8rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .scroll-hint { display: none; }
+  .minuteur { text-align: center; }
+  .minuteur .time { font-size: 1.6rem; }
+  .minuteur .time-units { font-size: 0.48rem; }
   .player { bottom: 1rem; padding: 0.7rem 1rem; gap: 0.8rem; }
   .player .sep-v:nth-of-type(2), .player .waveform { display: none; }
 }
