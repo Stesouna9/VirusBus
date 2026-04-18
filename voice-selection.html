@@ -3,17 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Virus Bus — Sélection des voix</title>
+  <title>Virus Bus — Sélection des voix (tour 2)</title>
   <meta name="theme-color" content="#050810" />
   <link rel="stylesheet" href="./css/main.css" />
   <style>
     body { cursor: auto; }
     .cursor, .cursor-glow { display: none !important; }
-    .vs-page {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 5rem 2rem 10rem;
-    }
+    .vs-page { max-width: 1000px; margin: 0 auto; padding: 5rem 2rem 10rem; }
     .vs-page h1 {
       font-family: var(--serif-display);
       font-size: clamp(2rem, 4vw, 3rem);
@@ -26,20 +22,28 @@
       font-family: var(--serif-read);
       font-size: 1.05rem;
       line-height: 1.6;
-      margin-bottom: 4rem;
-      max-width: 620px;
+      margin-bottom: 3rem;
+      max-width: 680px;
     }
+    .alert {
+      padding: 1.2rem 1.5rem;
+      border-left: 3px solid #FF8C5C;
+      background: rgba(255, 140, 92, 0.06);
+      margin: 2rem 0 3rem;
+      font-family: var(--serif-read);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .alert strong { color: #FF8C5C; }
     .role-block {
       margin-bottom: 4rem;
       border-top: 1px solid var(--line-strong);
       padding-top: 2rem;
     }
+    .role-block[data-locked] { opacity: 0.55; }
     .role-head {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem 2rem;
-      align-items: baseline;
-      margin-bottom: 0.5rem;
+      display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+      align-items: baseline; margin-bottom: 0.5rem;
     }
     .role-name {
       font-family: var(--mono);
@@ -47,6 +51,15 @@
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--accent);
+    }
+    .role-locked-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #4FE0D0;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(79, 224, 208, 0.4);
     }
     .role-desc {
       font-family: var(--serif-read);
@@ -65,7 +78,7 @@
     }
     .candidates {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1rem;
     }
     .candidate {
@@ -79,9 +92,13 @@
       border-color: var(--accent);
       transform: translateY(-2px);
     }
+    .candidate.picked {
+      border-color: #4FE0D0;
+      background: rgba(79, 224, 208, 0.05);
+    }
     .candidate .cand-label {
       font-family: var(--mono);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text);
@@ -98,36 +115,34 @@
       width: 100%;
       filter: invert(0.9) hue-rotate(170deg);
     }
-    .pick-form {
+    .fallback {
       margin-top: 5rem;
       padding: 2rem;
-      border: 1px solid var(--accent);
-      background: rgba(79, 168, 255, 0.03);
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
       border-radius: 4px;
     }
-    .pick-form h2 {
+    .fallback h2 {
       font-family: var(--mono);
       font-size: 1rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
-    .pick-form p {
+    .fallback p {
+      font-family: var(--serif-read);
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .fallback ul {
       font-family: var(--serif-read);
       color: var(--text-mute);
-      line-height: 1.7;
+      line-height: 1.8;
+      padding-left: 1.5rem;
     }
-    .pick-form pre {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: var(--bg-deep);
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      color: var(--accent-soft);
-      border-radius: 4px;
-      white-space: pre-wrap;
-    }
+    .fallback strong { color: var(--accent); }
     .back-link {
       display: inline-block;
       margin-bottom: 3rem;
@@ -146,13 +161,34 @@
 <main class="vs-page">
   <a href="./index.html" class="back-link">← Retour au site</a>
 
-  <h1>Sélection des voix</h1>
+  <h1>Sélection des voix — Tour 2</h1>
   <p class="intro">
-    5 rôles (narrateur + 4 personnages), chacun avec 2-3 voix candidates ElevenLabs
-    (modèle multilingual_v2, FR natif). Écoute chaque carte, choisis ta préférée
-    par rôle, puis dis-moi tes 5 picks en chat — je regénérerai ensuite un dialogue
-    complet avec tes voix élues.
+    Nouveaux candidats pour les 4 rôles non validés au tour 1. Lara déjà validée avec Jessica.
+    Les voix sont testées avec des réglages variés (posé / grave / coupant) pour explorer leur potentiel.
   </p>
+
+  <div class="alert">
+    <strong>Limitation free tier ElevenLabs :</strong> les voix vraiment françaises (actrices/acteurs natifs)
+    sont réservées au plan payant ($5/mo Starter). Les voix ci-dessous sont des voix anglophones
+    via le modèle <em>multilingual_v2</em> : la prononciation française marche, mais l'accent reste
+    légèrement anglo-saxon. Si aucune ne t'emballe, on regardera les alternatives en bas de page.
+  </div>
+
+  <!-- LARA — déjà validée -->
+  <div class="role-block" data-locked>
+    <div class="role-head">
+      <span class="role-name">Lara Rivolet</span>
+      <span class="role-locked-tag">✓ Validé</span>
+      <span class="role-desc">Jessica — douce, posée.</span>
+    </div>
+    <div class="candidates">
+      <div class="candidate picked">
+        <div class="cand-label">Jessica</div>
+        <div class="cand-sub">— validé tour 1</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/lara_jessica.mp3"></audio>
+      </div>
+    </div>
+  </div>
 
   <!-- NARRATEUR -->
   <div class="role-block">
@@ -165,14 +201,24 @@
     </div>
     <div class="candidates">
       <div class="candidate">
-        <div class="cand-label">Alice</div>
-        <div class="cand-sub">Claire, posée</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_alice.mp3"></audio>
+        <div class="cand-label">Alice — grave</div>
+        <div class="cand-sub">Stability max, style min</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_alice_grave.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Matilda</div>
-        <div class="cand-sub">Chaleureuse</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_matilda.mp3"></audio>
+        <div class="cand-label">Matilda — grave</div>
+        <div class="cand-sub">Chaleur atténuée</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_matilda_grave.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Laura — narrator</div>
+        <div class="cand-sub">Ton clinique</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_laura_narrator.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Sarah — grave</div>
+        <div class="cand-sub">Plus sourde</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_sarah_grave.mp3"></audio>
       </div>
     </div>
   </div>
@@ -181,26 +227,31 @@
   <div class="role-block">
     <div class="role-head">
       <span class="role-name">Gabriel Janvier</span>
-      <span class="role-desc">32 ans, pudique, observateur, légèrement hésitant.</span>
+      <span class="role-desc">32 ans, pudique, hésitante.</span>
     </div>
     <div class="role-line">
       « Qu'est-ce que tu veux dire par 'changé' ? »
     </div>
     <div class="candidates">
       <div class="candidate">
-        <div class="cand-label">Liam</div>
-        <div class="cand-sub">Jeune, naturel</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_liam.mp3"></audio>
+        <div class="cand-label">Adam</div>
+        <div class="cand-sub">Deep, neutre</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_adam.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Charlie</div>
-        <div class="cand-sub">Décontracté</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_charlie.mp3"></audio>
+        <div class="cand-label">Adam — adouci</div>
+        <div class="cand-sub">Plus vulnérable</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_adam_soft.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Chris</div>
-        <div class="cand-sub">Amical</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_chris.mp3"></audio>
+        <div class="cand-label">Eric — hésitant</div>
+        <div class="cand-sub">Drama preset</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_eric_hesitant.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Liam — posé</div>
+        <div class="cand-sub">Reprise grave</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_liam_grave.mp3"></audio>
       </div>
     </div>
   </div>
@@ -209,26 +260,31 @@
   <div class="role-block">
     <div class="role-head">
       <span class="role-name">Daniel Jasner</span>
-      <span class="role-desc">44 ans, physicien, analytique, articulée.</span>
+      <span class="role-desc">44 ans, physicien, analytique, articulé.</span>
     </div>
     <div class="role-line">
       « On n'est plus sur Terre. Les constantes physiques ont changé. »
     </div>
     <div class="candidates">
       <div class="candidate">
-        <div class="cand-label">George</div>
-        <div class="cand-sub">Mature, calme</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_george.mp3"></audio>
+        <div class="cand-label">Brian — deep</div>
+        <div class="cand-sub">Warm, mature</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_brian_grave.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Daniel</div>
-        <div class="cand-sub">Grave, posé</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_daniel.mp3"></audio>
+        <div class="cand-label">Antoni — posé</div>
+        <div class="cand-sub">Articulé, calme</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_antoni_grave.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Bill</div>
-        <div class="cand-sub">Narrateur doc</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_bill.mp3"></audio>
+        <div class="cand-label">Roger — ferme</div>
+        <div class="cand-sub">Autorité scientifique</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_roger_articul.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Arnold — crisp</div>
+        <div class="cand-sub">Précis, incisif</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_arnold.mp3"></audio>
       </div>
     </div>
   </div>
@@ -244,60 +300,49 @@
     </div>
     <div class="candidates">
       <div class="candidate">
-        <div class="cand-label">Matilda</div>
-        <div class="cand-sub">Autoritaire</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/solange_matilda.mp3"></audio>
+        <div class="cand-label">Matilda — coupante</div>
+        <div class="cand-sub">Stability max, style off</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/solange_matilda_cut.mp3"></audio>
       </div>
       <div class="candidate">
-        <div class="cand-label">Laura</div>
-        <div class="cand-sub">Claire, nette</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/solange_laura.mp3"></audio>
+        <div class="cand-label">Laura — coupante</div>
+        <div class="cand-sub">Voix claire clinique</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/solange_laura_cut.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Alice — coupante</div>
+        <div class="cand-sub">British cold</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/solange_alice_cut.mp3"></audio>
       </div>
     </div>
   </div>
 
-  <!-- LARA -->
-  <div class="role-block">
-    <div class="role-head">
-      <span class="role-name">Lara Rivolet</span>
-      <span class="role-desc">29 ans, biologiste, douce, intuitive.</span>
-    </div>
-    <div class="role-line">
-      « Là. Derrière vous. Vous ne la voyez pas parce qu'elle est à moitié enfouie dans le sol. »
-    </div>
-    <div class="candidates">
-      <div class="candidate">
-        <div class="cand-label">Sarah</div>
-        <div class="cand-sub">Douce</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/lara_sarah.mp3"></audio>
-      </div>
-      <div class="candidate">
-        <div class="cand-label">Lily</div>
-        <div class="cand-sub">Chaleureuse</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/lara_lily.mp3"></audio>
-      </div>
-      <div class="candidate">
-        <div class="cand-label">Jessica</div>
-        <div class="cand-sub">Jeune, posée</div>
-        <audio controls preload="none" src="./assets/audio/voice_samples/lara_jessica.mp3"></audio>
-      </div>
-    </div>
-  </div>
-
-  <div class="pick-form">
-    <h2>Tes choix</h2>
+  <div class="fallback">
+    <h2>Si toujours rien ne te convient</h2>
     <p>
-      Une fois que tu as écouté tous les candidats, donne-moi tes 5 picks au format ci-dessous (en chat) :
+      <strong>Option A — Upgrade ElevenLabs Starter (5 $/mo)</strong> : débloque la bibliothèque
+      complète, incluant des voix d'acteurs <em>francophones natifs</em>. Pas d'accent, un timbre
+      réaliste "prise de son studio". Tu peux annuler à tout moment. C'est la vraie solution pour
+      un projet narratif.
     </p>
-    <pre>narrateur = alice
-gabriel   = liam
-daniel    = george
-solange   = matilda
-lara      = sarah</pre>
-    <p style="margin-top: 1rem; font-size: 0.9rem;">
-      <em>Note : Charlotte (narrateur) et Aria (Solange) étaient candidats mais
-      nécessitent un plan payant ElevenLabs — retirés automatiquement du casting libre.</em>
+    <p>
+      <strong>Option B — Voice cloning (gratuit, 1 clone)</strong> : tu enregistres 1-2 minutes
+      de la voix que tu veux (la tienne, un ami, un acteur sur YouTube), ElevenLabs la clone en
+      60 s. Le résultat français est parfait puisque la voix source l'est. Limite du free tier :
+      1 clone à la fois, mais tu peux en changer.
     </p>
+    <p>
+      <strong>Option C — Revenir à Vivienne edge-tts</strong> : la voix actuelle des épisodes.
+      Monolithique (une seule voix pour tout) mais gratuite, illimitée, prononciation française
+      parfaite. Moins immersif mais fonctionnel.
+    </p>
+    <ul>
+      <li>Dis-moi ce que tu veux :
+        <strong>"paid"</strong> → tu upgrades et je te refais un tour avec les vraies voix FR.</li>
+      <li><strong>"clone [lien YouTube / fichier audio]"</strong> → je te guide pour cloner une voix.</li>
+      <li><strong>"vivienne"</strong> → on garde l'existant, on avance sur le reste.</li>
+      <li><strong>[nom d'une voix ci-dessus]</strong> → on valide et on continue.</li>
+    </ul>
   </div>
 </main>
 
