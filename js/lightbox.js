@@ -1,43 +1,44 @@
-/* ---------- Virus Bus — Photo lightbox ---------- */
+/* ---------- Virus Bus — GLightbox wrapper ---------- */
+// Remplace l'ancien lightbox maison par GLightbox (animations, swipe,
+// pinch-zoom, fullscreen mobile). Rétro-compatible avec data-lightbox :
+// on migre automatiquement à .glightbox au chargement.
 (function () {
-  const lb = document.getElementById('lightbox');
-  if (!lb) return;
-  const lbImg = lb.querySelector('img');
-  const closeBtn = lb.querySelector('.lightbox-close');
   const triggers = document.querySelectorAll('[data-lightbox]');
   if (!triggers.length) return;
 
-  let currentIdx = 0;
-  const urls = Array.from(triggers).map((a) => a.getAttribute('href'));
+  // Retire le vieux <div id="lightbox"> si présent (inutile avec GLightbox)
+  const oldLb = document.getElementById('lightbox');
+  if (oldLb) oldLb.remove();
 
-  function open(idx) {
-    currentIdx = idx;
-    lbImg.src = urls[idx];
-    lb.classList.add('on');
-    document.body.style.overflow = 'hidden';
-  }
-  function close() {
-    lb.classList.remove('on');
-    lbImg.src = '';
-    document.body.style.overflow = '';
-  }
-  function next(delta) {
-    const n = (currentIdx + delta + urls.length) % urls.length;
-    open(n);
-  }
+  // Marque les liens pour GLightbox et groupe-les (galerie)
+  triggers.forEach((a) => {
+    a.classList.add('glightbox');
+    if (!a.hasAttribute('data-gallery')) {
+      a.setAttribute('data-gallery', 'page-gallery');
+    }
+    a.removeAttribute('data-lightbox');
+  });
 
-  triggers.forEach((a, i) => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      open(i);
+  function init() {
+    if (!window.GLightbox) {
+      console.warn('GLightbox not loaded');
+      return;
+    }
+    window.GLightbox({
+      selector: '.glightbox',
+      touchNavigation: true,
+      loop: true,
+      keyboardNavigation: true,
+      closeOnOutsideClick: true,
+      openEffect: 'fade',
+      closeEffect: 'fade',
+      slideEffect: 'slide',
     });
-  });
-  closeBtn.addEventListener('click', close);
-  lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
-  document.addEventListener('keydown', (e) => {
-    if (!lb.classList.contains('on')) return;
-    if (e.code === 'Escape') close();
-    else if (e.code === 'ArrowRight') next(1);
-    else if (e.code === 'ArrowLeft') next(-1);
-  });
+  }
+
+  if (window.GLightbox) init();
+  else {
+    // GLightbox chargé en defer, attendre
+    window.addEventListener('load', init);
+  }
 })();
