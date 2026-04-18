@@ -3,20 +3,22 @@ window.addEventListener('load', () => {
 
   /* --- Lenis smooth scroll --- */
   let lenis = null;
-  if (window.Lenis) {
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  if (window.Lenis && !isCoarse) {
+    // Desktop: lerp-based smoothing (plus réactif que duration)
+    // Mobile: on laisse le scroll natif (Lenis + touch = souvent pénible)
     lenis = new Lenis({
-      duration: 1.15,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.1,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.4,
+      wheelMultiplier: 1.0,
     });
-    function raf(time) {
-      lenis.raf(time);
+    // Note: le driver RAF est branché sur gsap.ticker plus bas.
+    // Si GSAP absent, fallback rAF natif :
+    if (!window.gsap) {
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
-    // Re-link anchor nav: Lenis intercepts smooth scroll for anchors
+    // Re-link anchor nav : Lenis intercepte les smooth scrolls vers les ancres
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
       a.addEventListener('click', (e) => {
         const id = a.getAttribute('href');
@@ -24,7 +26,7 @@ window.addEventListener('load', () => {
           const el = document.querySelector(id);
           if (el) {
             e.preventDefault();
-            lenis.scrollTo(el, { duration: 1.4 });
+            lenis.scrollTo(el, { duration: 1.1 });
           }
         }
       });
@@ -121,15 +123,19 @@ window.addEventListener('load', () => {
       });
     }
 
-    // Episode row hover-expand on scroll
-    document.querySelectorAll('.episode-row').forEach((row, i) => {
-      gsap.set(row, { opacity: 0, x: -30 });
-      gsap.to(row, {
+    // Episode rows: un trigger par saison (stagger) au lieu d'un par ligne.
+    // Évite 40 ScrollTriggers qui faisaient ramer le scroll.
+    document.querySelectorAll('.season-block').forEach((block) => {
+      const rows = block.querySelectorAll('.episode-row');
+      if (!rows.length) return;
+      gsap.set(rows, { opacity: 0, x: -20 });
+      gsap.to(rows, {
         opacity: 1,
         x: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: row, start: 'top 88%', toggleActions: 'play none none none' },
+        duration: 0.6,
+        ease: 'power2.out',
+        stagger: 0.04,
+        scrollTrigger: { trigger: block, start: 'top 90%', toggleActions: 'play none none none' },
       });
     });
   }
