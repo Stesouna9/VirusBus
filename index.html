@@ -12,6 +12,14 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -452,7 +460,7 @@
   </div>
 </footer>
 
-<script src="./js/vortex.js"></script>
+<script type="module" src="./js/vortex.js"></script>
 <script src="./js/ambient.js"></script>
 <script src="./js/enhance.js"></script>
 </body>

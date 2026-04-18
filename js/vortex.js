@@ -1,175 +1,255 @@
-/* ---------- Virus Bus — Vortex shader (vanilla WebGL, no CDN) ---------- */
-(function () {
-  const canvas = document.getElementById('vortex-canvas');
-  if (!canvas) return;
-  const gl = canvas.getContext('webgl', { alpha: false, antialias: false, premultipliedAlpha: false });
-  if (!gl) {
-    console.warn('WebGL unavailable, vortex disabled.');
-    return;
-  }
+/* ---------- Virus Bus — three.js volumetric vortex with bloom postprocessing ---------- */
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
+const canvas = document.getElementById('vortex-canvas');
+if (canvas) {
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
 
-  const vsrc = `
-    attribute vec2 aPosition;
-    varying vec2 vUv;
-    void main() {
-      vUv = aPosition * 0.5 + 0.5;
-      gl_Position = vec4(aPosition, 0.0, 1.0);
+  // ---------- Renderer ----------
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: false,
+    alpha: false,
+    powerPreference: 'high-performance',
+  });
+  renderer.setPixelRatio(DPR);
+  renderer.setSize(W(), H(), false);
+  renderer.setClearColor(0x050810, 1);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+
+  // ---------- Scene + camera ----------
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x050810, 0.012);
+
+  const camera = new THREE.PerspectiveCamera(72, W() / H(), 0.1, 400);
+  camera.position.set(0, 0, 0);
+  camera.lookAt(0, 0, -1);
+
+  // ---------- Particle tunnel ----------
+  // Thousands of glowing dots distributed in a long forward-moving cylinder.
+  // When a particle crosses the camera, it recycles far ahead, giving infinite warp.
+  const COUNT = 4200;
+  const TUNNEL_LENGTH = 280;
+  const TUNNEL_RADIUS_MIN = 3;
+  const TUNNEL_RADIUS_MAX = 42;
+
+  const positions = new Float32Array(COUNT * 3);
+  const colors = new Float32Array(COUNT * 3);
+  const sizes = new Float32Array(COUNT);
+  const seeds = new Float32Array(COUNT);
+
+  const deepBlue  = new THREE.Color(0x1d5ea8);
+  const vortex    = new THREE.Color(0x4FA8FF);
+  const cyanGlow  = new THREE.Color(0x7fd9ff);
+  const white     = new THREE.Color(0xe0f2ff);
+
+  function hexa(theta) {
+    // Bias angular distribution toward a soft spiral pattern (visual richness)
+    return theta + 0.8 * Math.sin(theta * 3);
+  }
+
+  for (let i = 0; i < COUNT; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const tBent = hexa(theta);
+    // Radial distribution: more dots near center (forms a "core")
+    const rRand = Math.pow(Math.random(), 1.8);
+    const radius = TUNNEL_RADIUS_MIN + rRand * (TUNNEL_RADIUS_MAX - TUNNEL_RADIUS_MIN);
+    const z = -Math.random() * TUNNEL_LENGTH;
+    const x = Math.cos(tBent) * radius;
+    const y = Math.sin(tBent) * radius;
+    positions[i * 3 + 0] = x;
+    positions[i * 3 + 1] = y;
+    positions[i * 3 + 2] = z;
+
+    // Color: deeper blue on outer ring, cyan/white near the axis.
+    const rNorm = (radius - TUNNEL_RADIUS_MIN) / (TUNNEL_RADIUS_MAX - TUNNEL_RADIUS_MIN);
+    const c = new THREE.Color();
+    if (rNorm < 0.3) {
+      c.lerpColors(white, cyanGlow, rNorm / 0.3);
+    } else if (rNorm < 0.65) {
+      c.lerpColors(cyanGlow, vortex, (rNorm - 0.3) / 0.35);
+    } else {
+      c.lerpColors(vortex, deepBlue, (rNorm - 0.65) / 0.35);
     }
-  `;
+    colors[i * 3 + 0] = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
 
-  // ---------- "Star Nest" volumetric space tunnel ----------
-  // Original shader by Pablo Roman Andrioli (CC-BY-NC-SA). Ported and
-  // re-tinted for Virus Bus' deep-blue portal aesthetic.
-  const fsrc = `
-    precision highp float;
-    uniform float uTime;
-    uniform vec2 uResolution;
-    uniform vec2 uMouse;
-    varying vec2 vUv;
+    // Size: core particles larger, periphery smaller
+    sizes[i] = (1.6 - rNorm * 1.1) * (0.7 + Math.random() * 0.8);
+    seeds[i] = Math.random() * 10;
+  }
 
-    #define ITER 15
-    #define VOLSTEPS 18
-    #define FORMU 0.53
-    #define STEPSZ 0.1
-    #define ZOOM 0.80
-    #define TILE 0.85
-    #define SPEED 0.012
-    #define BRIGHT 0.0018
-    #define DARK 0.30
-    #define FADE 0.73
-    #define SAT 0.85
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+  geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
 
-    void main() {
-      vec2 uv = vUv - 0.5;
-      uv.x *= uResolution.x / uResolution.y;
-
-      vec3 dir = vec3(uv * ZOOM, 1.0);
-      float t = uTime * SPEED + 0.25;
-
-      // Gentle rotation driven by mouse
-      float a1 = 0.5 + uMouse.x * 0.6;
-      float a2 = 0.8 + uMouse.y * 0.6;
-      mat2 rot1 = mat2(cos(a1), sin(a1), -sin(a1), cos(a1));
-      mat2 rot2 = mat2(cos(a2), sin(a2), -sin(a2), cos(a2));
-      dir.xz *= rot1;
-      dir.xy *= rot2;
-
-      vec3 from = vec3(1.0, 0.5, 0.5);
-      from += vec3(t * 2.0, t, -2.0);
-      from.xz *= rot1;
-      from.xy *= rot2;
-
-      // Volumetric integration through a Kaleidoscopic IFS
-      float s = 0.1;
-      float fade = 1.0;
-      vec3 v = vec3(0.0);
-      for (int r = 0; r < VOLSTEPS; r++) {
-        vec3 p = from + s * dir * 0.5;
-        p = abs(vec3(TILE) - mod(p, vec3(TILE * 2.0)));
-        float pa = 0.0, a = 0.0;
-        for (int i = 0; i < ITER; i++) {
-          p = abs(p) / dot(p, p) - FORMU;
-          a += abs(length(p) - pa);
-          pa = length(p);
-        }
-        float dm = max(0.0, DARK - a * a * 0.001);
-        a *= a * a;
-        if (r > 6) fade *= 1.0 - dm;
-        v += fade;
-        v += vec3(s * s * s * s, s * s, s) * a * BRIGHT * fade;
-        fade *= FADE;
-        s += STEPSZ;
+  // ---------- Custom shader for soft glowing particles ----------
+  const particleMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uTime:  { value: 0 },
+      uPixel: { value: DPR },
+      uScreenH: { value: H() },
+    },
+    vertexShader: /* glsl */ `
+      attribute float aSize;
+      attribute float aSeed;
+      varying vec3 vColor;
+      varying float vAlpha;
+      uniform float uTime;
+      uniform float uPixel;
+      uniform float uScreenH;
+      void main() {
+        vColor = color;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        float dist = -mv.z;
+        // Fade in from far, fade out at camera plane
+        vAlpha = smoothstep(280.0, 80.0, dist) * smoothstep(0.5, 8.0, dist);
+        float flicker = 0.85 + 0.15 * sin(uTime * 2.5 + aSeed * 7.0);
+        vAlpha *= flicker;
+        float size = aSize * uScreenH * 0.012 / dist * uPixel;
+        gl_PointSize = max(size, 1.0);
+        gl_Position = projectionMatrix * mv;
       }
+    `,
+    fragmentShader: /* glsl */ `
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        vec2 p = gl_PointCoord - 0.5;
+        float d = length(p);
+        if (d > 0.5) discard;
+        // Soft radial glow with a bright core
+        float core = smoothstep(0.5, 0.0, d);
+        float glow = pow(core, 2.4);
+        vec3 col = vColor * (0.5 + glow * 1.5);
+        gl_FragColor = vec4(col, glow * vAlpha);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    vertexColors: true,
+  });
 
-      // Desaturate slightly
-      v = mix(vec3(length(v)), v, SAT);
+  const points = new THREE.Points(geometry, particleMat);
+  scene.add(points);
 
-      // Rebalance to blue/cyan palette (Virus Bus)
-      vec3 col = v * 0.01;
-      float lum = dot(col, vec3(0.299, 0.587, 0.114));
-      vec3 deep = vec3(0.08, 0.30, 0.72);
-      vec3 cyan = vec3(0.42, 0.80, 1.00);
-      vec3 warm = vec3(0.85, 0.93, 1.00);
-      vec3 tinted = mix(deep, cyan, smoothstep(0.15, 0.55, lum));
-      tinted = mix(tinted, warm, smoothstep(0.55, 0.95, lum));
-      col = tinted * lum * 1.2;
+  // ---------- Axial beam (core light tube through the tunnel) ----------
+  const beamGeom = new THREE.CylinderGeometry(0.25, 0.8, TUNNEL_LENGTH, 16, 1, true);
+  const beamMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: /* glsl */ `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform float uTime;
+      varying vec2 vUv;
+      void main() {
+        float t = fract(vUv.y * 4.0 - uTime * 0.4);
+        float bright = smoothstep(0.0, 1.0, t) * smoothstep(1.0, 0.0, t) * 4.0;
+        vec3 col = vec3(0.25, 0.6, 1.0) * bright;
+        float fade = smoothstep(0.0, 0.15, vUv.y) * smoothstep(1.0, 0.85, vUv.y);
+        gl_FragColor = vec4(col * fade, 0.25 * fade);
+      }
+    `,
+    side: THREE.DoubleSide,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const beam = new THREE.Mesh(beamGeom, beamMat);
+  beam.rotation.x = Math.PI / 2;
+  beam.position.z = -TUNNEL_LENGTH / 2;
+  scene.add(beam);
 
-      // Gentle vignette
-      float vign = smoothstep(1.2, 0.25, length(uv));
-      col *= 0.4 + 0.6 * vign;
+  // ---------- Post-processing: bloom ----------
+  const composer = new EffectComposer(renderer);
+  composer.setPixelRatio(DPR);
+  composer.setSize(W(), H());
+  composer.addPass(new RenderPass(scene, camera));
 
-      gl_FragColor = vec4(col, 1.0);
-    }
-  `;
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(W(), H()),
+    0.95,   // strength
+    0.8,    // radius
+    0.12    // threshold
+  );
+  composer.addPass(bloomPass);
+  composer.addPass(new OutputPass());
 
-  function compile(type, source) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, source);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-      console.error('Shader compile error:', gl.getShaderInfoLog(s));
-      gl.deleteShader(s);
-      return null;
-    }
-    return s;
-  }
-
-  const vs = compile(gl.VERTEX_SHADER, vsrc);
-  const fs = compile(gl.FRAGMENT_SHADER, fsrc);
-  if (!vs || !fs) return;
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.error('Program link error:', gl.getProgramInfoLog(prog));
-    return;
-  }
-  gl.useProgram(prog);
-
-  // Fullscreen triangle (covers viewport, one triangle is enough)
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'aPosition');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const uTime = gl.getUniformLocation(prog, 'uTime');
-  const uRes = gl.getUniformLocation(prog, 'uResolution');
-  const uMouse = gl.getUniformLocation(prog, 'uMouse');
-
+  // ---------- Mouse-driven camera orbit ----------
   let targetMx = 0, targetMy = 0, mx = 0, my = 0;
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('pointermove', (e) => {
     targetMx = (e.clientX / window.innerWidth - 0.5) * 2;
     targetMy = -(e.clientY / window.innerHeight - 0.5) * 2;
   });
 
-  function resize() {
-    const w = window.innerWidth * DPR;
-    const h = window.innerHeight * DPR;
-    canvas.width = w;
-    canvas.height = h;
-    canvas.style.width = window.innerWidth + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-    gl.viewport(0, 0, w, h);
-    gl.uniform2f(uRes, w, h);
+  // ---------- Resize ----------
+  function onResize() {
+    const w = W(), h = H();
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+    composer.setSize(w, h);
+    bloomPass.setSize(w, h);
+    particleMat.uniforms.uScreenH.value = h;
   }
-  window.addEventListener('resize', resize);
-  resize();
+  window.addEventListener('resize', onResize);
 
-  const start = performance.now();
+  // ---------- Animation loop ----------
+  const SPEED = 12;  // world units per second
+  const clock = new THREE.Clock();
+
   function tick() {
-    const t = (performance.now() - start) * 0.001;
-    gl.uniform1f(uTime, t);
-    mx += (targetMx - mx) * 0.06;
-    my += (targetMy - my) * 0.06;
-    gl.uniform2f(uMouse, mx, my);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    const dt = Math.min(clock.getDelta(), 0.05);
+    const t = clock.getElapsedTime();
+
+    // Advance all particles forward; recycle when past camera
+    const pos = geometry.attributes.position.array;
+    for (let i = 0; i < COUNT; i++) {
+      const zIdx = i * 3 + 2;
+      pos[zIdx] += SPEED * dt;
+      if (pos[zIdx] > 2) {
+        // Recycle at far end with fresh angular position
+        const theta = Math.random() * Math.PI * 2;
+        const tBent = theta + 0.8 * Math.sin(theta * 3);
+        const rRand = Math.pow(Math.random(), 1.8);
+        const radius = TUNNEL_RADIUS_MIN + rRand * (TUNNEL_RADIUS_MAX - TUNNEL_RADIUS_MIN);
+        pos[i * 3 + 0] = Math.cos(tBent) * radius;
+        pos[i * 3 + 1] = Math.sin(tBent) * radius;
+        pos[zIdx] = -TUNNEL_LENGTH + (Math.random() - 0.5) * 8;
+      }
+    }
+    geometry.attributes.position.needsUpdate = true;
+
+    // Gentle mouse-follow camera rotation
+    mx += (targetMx - mx) * 0.04;
+    my += (targetMy - my) * 0.04;
+    camera.rotation.y = mx * 0.18;
+    camera.rotation.x = my * 0.12;
+
+    // Slow dolly oscillation for subtle breathing
+    camera.position.z = Math.sin(t * 0.12) * 0.6;
+
+    particleMat.uniforms.uTime.value = t;
+    beamMat.uniforms.uTime.value = t;
+
+    composer.render();
     requestAnimationFrame(tick);
   }
   tick();
-})();
+}
