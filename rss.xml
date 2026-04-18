@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Virus Bus — Roman-série SF</title>
+    <link>https://virusbus.fr/</link>
+    <description>Un mardi ordinaire, un bus, quatre passagers, des mondes parallèles. Roman-série de science-fiction française à lire et écouter gratuitement.</description>
+    <language>fr-FR</language>
+    <copyright>© 2026 Doc Laundal — OKALAM Studio</copyright>
+    <atom:link href="https://virusbus.fr/rss.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://virusbus.fr/assets/img/og-card.jpg</url>
+      <title>Virus Bus</title>
+      <link>https://virusbus.fr/</link>
+    </image>
+
+    <item>
+      <title>E03 · Un monde d'ego</title>
+      <link>https://virusbus.fr/episodes/episode-03.html</link>
+      <guid isPermaLink="true">https://virusbus.fr/episodes/episode-03.html</guid>
+      <pubDate>Sat, 18 Apr 2026 12:00:00 +0200</pubDate>
+      <description>Saison 1, Épisode 3. Le bus s'est garé. Quatre silhouettes. Un monde qu'ils ne connaissent pas encore, avec une clef qui n'est pas la leur.</description>
+      <enclosure url="https://virusbus.fr/assets/audio/e03_virus.mp3" type="audio/mpeg" length="29916144" />
+    </item>
+
+    <item>
+      <title>E02 · Bus</title>
+      <link>https://virusbus.fr/episodes/episode-02.html</link>
+      <guid isPermaLink="true">https://virusbus.fr/episodes/episode-02.html</guid>
+      <pubDate>Fri, 17 Apr 2026 22:00:00 +0200</pubDate>
+      <description>Saison 1, Épisode 2. Le bus glisse entre les mondes. Une voix, dehors, dans la chaleur sèche : de quel monde vous venez pour atterrir ici ?</description>
+      <enclosure url="https://virusbus.fr/assets/audio/e02_virus.mp3" type="audio/mpeg" length="27348912" />
+    </item>
+
+    <item>
+      <title>E01 · Virus</title>
+      <link>https://virusbus.fr/episodes/episode-01.html</link>
+      <guid isPermaLink="true">https://virusbus.fr/episodes/episode-01.html</guid>
+      <pubDate>Fri, 17 Apr 2026 19:00:00 +0200</pubDate>
+      <description>Saison 1, Épisode 1. Un mardi ordinaire, un bus, un flash bleu — et la ville se vide. La genèse.</description>
+      <enclosure url="https://virusbus.fr/assets/audio/e01_virus.mp3" type="audio/mpeg" length="18403920" />
+    </item>
+  </channel>
+</rss>
