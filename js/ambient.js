@@ -61,44 +61,54 @@
   onScroll();
 })();
 
-/* ---------- Live Minuteur (real-time, persisted countdown to next jump) ---------- */
+/* ---------- Live Minuteur (global deterministic countdown — same for everyone) ---------- */
 (function () {
   const el = document.getElementById('minuteur-time');
   if (!el) return;
 
-  // Persistent state across reloads
-  const TARGET_KEY = 'virusbus.jumpTarget';
-  const COUNT_KEY = 'virusbus.worldCount';
+  // Fixed anchor: same reference for every visitor worldwide
+  const EPOCH = Date.UTC(2026, 3, 18, 0, 0, 0); // 18 avril 2026 00:00 UTC
+  const MIN_MS = 20 * 60 * 1000;           // 20 minutes
+  const MAX_MS = 14 * 24 * 3600 * 1000;    // 14 jours
 
-  function randomJumpMs() {
-    // Between 12h and 3 days
-    return (12 * 3600 + Math.floor(Math.random() * (3 * 86400 - 12 * 3600))) * 1000;
+  // Deterministic PRNG: cycle index → duration in ms. Same result on every device.
+  function cycleDurationMs(n) {
+    let h = (n * 2654435761) >>> 0;
+    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
+    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
+    h = (h ^ (h >>> 16)) >>> 0;
+    const r = h / 0xFFFFFFFF;
+    return MIN_MS + r * (MAX_MS - MIN_MS);
   }
 
-  function getTarget() {
-    const raw = localStorage.getItem(TARGET_KEY);
-    const t = raw ? parseInt(raw, 10) : NaN;
-    if (!isFinite(t) || t < Date.now() - 86400 * 1000) {
-      // No target yet, or very stale (>1 day past)
-      const fresh = Date.now() + (2 * 86400 + 10 * 3600 + 34 * 60 + 29) * 1000;
-      localStorage.setItem(TARGET_KEY, String(fresh));
-      return fresh;
+  // Find the current jump target and cycle index based on EPOCH + deterministic durations
+  function computeState(now) {
+    let t = EPOCH;
+    let n = 0;
+    while (t <= now) {
+      n += 1;
+      t += cycleDurationMs(n);
     }
-    return t;
+    return { target: t, worldCount: n }; // worldCount = 1 before first jump, then 2, 3...
   }
 
-  function getCount() {
-    const n = parseInt(localStorage.getItem(COUNT_KEY) || '1', 10);
-    return isFinite(n) && n >= 1 ? n : 1;
-  }
-  function setCount(n) { localStorage.setItem(COUNT_KEY, String(n)); }
-
-  let target = getTarget();
-  let worldCount = getCount();
+  let { target, worldCount } = computeState(Date.now());
+  let lastSeenCount = worldCount;
 
   function pad(n, w = 2) { return String(n).padStart(w, '0'); }
   function render() {
-    const diffMs = Math.max(0, target - Date.now());
+    const now = Date.now();
+    const state = computeState(now);
+    target = state.target;
+    if (state.worldCount !== lastSeenCount) {
+      const increased = state.worldCount > lastSeenCount;
+      lastSeenCount = state.worldCount;
+      worldCount = state.worldCount;
+      if (increased) triggerJumpAnimation();
+    } else {
+      worldCount = state.worldCount;
+    }
+    const diffMs = Math.max(0, target - now);
     const total = Math.floor(diffMs / 1000);
     const d = Math.floor(total / 86400);
     const h = Math.floor((total % 86400) / 3600);
@@ -107,7 +117,7 @@
     el.textContent = `${pad(d)}:${pad(h)}:${pad(m)}:${pad(s)}`;
   }
 
-  // Overlay elements (shared)
+  // Overlay elements for jump animation
   const flash = document.createElement('div');
   flash.className = 'vortex-flash';
   document.body.appendChild(flash);
@@ -115,39 +125,29 @@
   jumpMsg.className = 'jump-msg';
   document.body.appendChild(jumpMsg);
 
-  function triggerJump() {
-    worldCount += 1;
-    setCount(worldCount);
-    target = Date.now() + randomJumpMs();
-    localStorage.setItem(TARGET_KEY, String(target));
-
+  function triggerJumpAnimation() {
     flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
     jumpMsg.textContent = `SAUT ↗ MONDE N°${worldCount}`;
     jumpMsg.classList.remove('on'); void jumpMsg.offsetWidth; jumpMsg.classList.add('on');
-
     const hero = document.querySelector('.hero');
     if (hero) { hero.classList.add('shake'); setTimeout(() => hero.classList.remove('shake'), 700); }
   }
 
   render();
-  setInterval(() => {
-    if (Date.now() >= target) {
-      render();
-      triggerJump();
-    } else {
-      render();
-    }
-  }, 1000);
+  setInterval(render, 1000);
 
-  // Easter egg: click the minuteur to force a jump
+  // Easter egg: click the minuteur → local-only preview of jump animation (does not alter global clock)
   el.style.cursor = 'none';
   el.addEventListener('click', () => {
-    target = Date.now();
-    render();
-    triggerJump();
+    const tempCount = worldCount + 1;
+    flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
+    jumpMsg.textContent = `SAUT ↗ MONDE N°${tempCount} (aperçu)`;
+    jumpMsg.classList.remove('on'); void jumpMsg.offsetWidth; jumpMsg.classList.add('on');
+    const hero = document.querySelector('.hero');
+    if (hero) { hero.classList.add('shake'); setTimeout(() => hero.classList.remove('shake'), 700); }
   });
 
-  // When tab is refocused, re-sync immediately (clock may have ticked while idle)
+  // Re-sync when tab is refocused
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) render();
   });

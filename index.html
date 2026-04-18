@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Virus Bus — Un roman-série de science-fiction</title>
-  <meta name="description" content="Virus Bus — un roman-série de science-fiction. Quatre passagers, un bus, des mondes parallèles. Un objet, un minuteur, et une entité qui les traque : le Conduit." />
+  <meta name="description" content="Virus Bus — un roman-série de science-fiction. Quatre passagers, un bus, des mondes parallèles. Un objet, un minuteur. Aucun retour possible." />
   <meta name="theme-color" content="#050810" />
   <link rel="stylesheet" href="./css/main.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.css" />
@@ -59,6 +59,9 @@
     <div class="minuteur">
       <div class="label">Minuteur</div>
       <div class="time" id="minuteur-time">02:10:34:29</div>
+      <div class="time-units" aria-hidden="true">
+        <span>jours</span><span>heures</span><span>min</span><span>sec</span>
+      </div>
     </div>
   </div>
 </section>
@@ -74,7 +77,7 @@
           Gabriel Janvier, un homme ordinaire, monte dans son bus un mardi matin. Un objet mystérieux offert par son amie Elisa fusionne avec l'appareil expérimental d'un autre passager. Une lumière bleue, un minuteur apparaît — et le bus se met à glisser entre les mondes.
         </p>
         <p>
-          Traqués par une entité qu'ils nomment <em>le Conduit</em>, Gabriel, Daniel, Solange et Lara vont devoir apprendre à naviguer à travers des univers différents. Chaque saut les rapproche d'une vérité plus grande que leurs propres vies.
+          Gabriel, Daniel, Solange et Lara vont devoir apprendre à naviguer à travers des univers différents. Chaque saut les rapproche d'une vérité plus grande que leurs propres vies.
         </p>
         <p style="color: var(--text-mute); font-style: italic;">
           Inspirations : <em>Sliders</em>, <em>Stargate SG-1</em>, <em>X-Files</em>, <em>Doctor Who</em>. Un registre littéraire, introspectif, cinématographique.
@@ -143,36 +146,118 @@
 <section id="episodes" class="episodes">
   <div class="container">
     <div class="section-header reveal">
-      <span class="eyebrow">Saison 1</span>
-      <h2 style="margin-top: 1.5rem;">Dix épisodes. Dix mondes.</h2>
+      <span class="eyebrow">Les épisodes</span>
+      <h2 style="margin-top: 1.5rem;">Quatre saisons. Des mondes.</h2>
     </div>
 
-    <a href="./episodes/episode-01.html" class="episode-row reveal" style="text-decoration:none; color:inherit; border-bottom:0;">
-      <div class="episode-num">E01</div>
-      <div class="episode-title">Virus<em>La genèse. Un bus, un flash, une ville vidée.</em></div>
-      <div class="episode-status avail">Disponible</div>
-      <div class="episode-cta">Lire · Écouter</div>
-    </a>
+    <div class="season-block reveal">
+      <div class="season-head">Saison 1</div>
 
-    <div class="episode-row locked reveal">
-      <div class="episode-num">E02</div>
-      <div class="episode-title">Bus<em>Le monde militaire de Solange. 48h d'études, une attaque.</em></div>
-      <div class="episode-status">À venir</div>
-      <div class="episode-cta">Bientôt</div>
+      <a href="./episodes/episode-01.html" class="episode-row" style="text-decoration:none; color:inherit; border-bottom:0;">
+        <div class="episode-num">E01</div>
+        <div class="episode-title">Virus</div>
+        <div class="episode-status avail">Disponible</div>
+        <div class="episode-cta">Lire · Écouter</div>
+      </a>
+
+      <a href="./episodes/episode-02.html" class="episode-row" style="text-decoration:none; color:inherit; border-bottom:0;">
+        <div class="episode-num">E02</div>
+        <div class="episode-title">Bus</div>
+        <div class="episode-status avail">Disponible</div>
+        <div class="episode-cta">Lire · Écouter</div>
+      </a>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E03</div>
+        <div class="episode-title">Un monde d'ego</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E04</div>
+        <div class="episode-title">Un monde protégé</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E05</div>
+        <div class="episode-title">Un monde tamponné</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E06</div>
+        <div class="episode-title">Un monde de Vice</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E07</div>
+        <div class="episode-title">—</div>
+        <div class="episode-status">En développement</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E08</div>
+        <div class="episode-title">Un monde de mémoire</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E09</div>
+        <div class="episode-title">—</div>
+        <div class="episode-status">En développement</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E10</div>
+        <div class="episode-title">Un monde de Far West</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
     </div>
 
-    <div class="episode-row locked reveal">
-      <div class="episode-num">E03</div>
-      <div class="episode-title">Citadelle<em>La structure spatiale. Uniquement des variantes.</em></div>
-      <div class="episode-status">À venir</div>
-      <div class="episode-cta">Bientôt</div>
+    <div class="season-block reveal">
+      <div class="season-head">Saison 2</div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E01</div>
+        <div class="episode-title">Un monde sans fin</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E03</div>
+        <div class="episode-title">Un monde infiniment petit</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E06</div>
+        <div class="episode-title">Un monde impossible</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
     </div>
 
-    <div class="episode-row locked reveal">
-      <div class="episode-num">E04 — E10</div>
-      <div class="episode-title">À venir<em>Sept épisodes en cours d'écriture.</em></div>
-      <div class="episode-status">En écriture</div>
-      <div class="episode-cta">Bientôt</div>
+    <div class="season-block reveal">
+      <div class="season-head">Saison 4</div>
+
+      <div class="episode-row locked">
+        <div class="episode-num">E10</div>
+        <div class="episode-title">Terminus</div>
+        <div class="episode-status">À venir</div>
+        <div class="episode-cta">Bientôt</div>
+      </div>
     </div>
   </div>
 </section>

@@ -310,7 +310,19 @@ section { position: relative; padding: 10rem 0; }
   letter-spacing: 0.1em;
   text-shadow: 0 0 20px var(--accent-glow);
   margin-top: 0.4rem;
+  font-variant-numeric: tabular-nums;
 }
+.minuteur .time-units {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 0.3rem;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.minuteur .time-units span { text-align: center; }
 
 /* ---------- Jump event: flash + message + shake ---------- */
 .vortex-flash {
@@ -486,6 +498,18 @@ section { position: relative; padding: 10rem 0; }
 
 /* ---------- Episodes CTA ---------- */
 .episodes { padding: 10rem 0; }
+.season-block { margin-bottom: 4rem; }
+.season-block:last-child { margin-bottom: 0; }
+.season-head {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: 0.5rem;
+}
 .episode-row {
   display: grid;
   grid-template-columns: 80px 1fr 1fr auto;
@@ -793,6 +817,13 @@ section { position: relative; padding: 10rem 0; }
   font-size: 1.4rem;
   letter-spacing: 1rem;
   opacity: 0.7;
+}
+.read-article .scene-break {
+  text-align: center;
+  color: var(--text-dim);
+  letter-spacing: 1rem;
+  margin: 3.5rem 0;
+  opacity: 0.6;
 }
 .read-article .end {
   text-align: center;
