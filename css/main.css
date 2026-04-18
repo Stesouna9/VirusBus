@@ -498,47 +498,167 @@ section { position: relative; padding: 10rem 0; }
 
 /* ---------- Episodes CTA ---------- */
 .episodes { padding: 10rem 0; }
-.season-block { margin-bottom: 4rem; }
+
+/* ---------- Per-season color palette (narrative arc: blue → cyan → violet → amber) ---------- */
+.season-block {
+  --season-color: var(--accent);
+  --season-glow: rgba(79, 168, 255, 0.25);
+  margin-bottom: 5rem;
+  position: relative;
+}
 .season-block:last-child { margin-bottom: 0; }
+.season-block[data-season="1"] {
+  --season-color: #4FA8FF;  /* bleu vortex — genèse */
+  --season-glow: rgba(79, 168, 255, 0.28);
+}
+.season-block[data-season="2"] {
+  --season-color: #4FE0D0;  /* cyan — infini, impossible */
+  --season-glow: rgba(79, 224, 208, 0.28);
+}
+.season-block[data-season="3"] {
+  --season-color: #A78BFA;  /* violet — citadin, mystère */
+  --season-glow: rgba(167, 139, 250, 0.28);
+}
+.season-block[data-season="4"] {
+  --season-color: #FF8C5C;  /* ambre — Terminus, finale */
+  --season-glow: rgba(255, 140, 92, 0.28);
+}
+
 .season-head {
   font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
+  font-size: 0.85rem;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: var(--accent);
-  padding: 1.2rem 0;
+  color: var(--season-color);
+  padding: 1.4rem 0;
   border-bottom: 1px solid var(--line-strong);
   margin-bottom: 0.5rem;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, var(--bg) 70%, rgba(5, 8, 16, 0.85) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 10;
+  text-shadow: 0 0 20px var(--season-glow);
 }
+.season-head::before {
+  content: '';
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--season-color);
+  box-shadow: 0 0 12px var(--season-glow);
+  margin-right: 0.8em;
+  vertical-align: middle;
+}
+
 .episode-row {
   display: grid;
   grid-template-columns: 80px 1fr 1fr auto;
   gap: 3rem;
   align-items: center;
-  padding: 3rem 0;
+  padding: 2.5rem 0;
   border-top: 1px solid var(--line);
-  transition: background 0.4s ease, padding 0.4s ease;
+  transition: background 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
 }
 .episode-row:last-child { border-bottom: 1px solid var(--line); }
-.episode-row:hover { background: linear-gradient(90deg, transparent 0%, rgba(79, 168, 255, 0.04) 50%, transparent 100%); padding: 3rem 2rem; }
-.episode-row.locked { opacity: 0.35; pointer-events: none; }
-.episode-num { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.2em; }
-.episode-title { font-family: var(--serif-display); font-size: 1.8rem; font-weight: 400; }
-.episode-title em { font-style: italic; color: var(--text-mute); font-size: 1rem; font-family: var(--serif-read); display: block; margin-top: 0.3rem; }
-.episode-status { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); }
-.episode-status.avail { color: var(--accent); }
+.episode-row:hover {
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--season-color) 6%, transparent) 50%, transparent 100%);
+  padding: 2.5rem 2rem;
+  border-top-color: color-mix(in srgb, var(--season-color) 25%, transparent);
+}
+.episode-row.locked { opacity: 0.55; pointer-events: none; }
+.episode-row.locked.is-dev { opacity: 0.38; }
+
+.episode-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--season-color);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 12px var(--season-glow);
+}
+.episode-title {
+  font-family: var(--serif-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+.episode-title em {
+  font-style: italic;
+  color: var(--text-mute);
+  font-size: 1rem;
+  font-family: var(--serif-read);
+  display: block;
+  margin-top: 0.3rem;
+}
+.episode-title.dev {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+  font-family: var(--serif-read);
+}
+
+.episode-status {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.episode-status.avail {
+  color: var(--season-color);
+  text-shadow: 0 0 10px var(--season-glow);
+}
+
 .episode-cta {
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--text);
-  border: none;
-  padding: 0.8rem 1.5rem;
   border: 1px solid var(--line-strong);
+  padding: 0.8rem 1.5rem;
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
-.episode-cta:hover { background: var(--accent); color: var(--bg-deep); border-color: var(--accent); }
+.episode-row:hover .episode-cta,
+.episode-cta:hover {
+  background: var(--season-color);
+  color: var(--bg-deep);
+  border-color: var(--season-color);
+}
+
+/* ---------- Episodes — Mobile (<= 700px) ---------- */
+@media (max-width: 700px) {
+  .episodes { padding: 5rem 0; }
+  .season-block { margin-bottom: 3rem; }
+  .season-head {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    padding: 1rem 0;
+  }
+  .episode-row {
+    grid-template-columns: 48px 1fr;
+    grid-template-areas:
+      "num   title"
+      "num   status"
+      "cta   cta";
+    gap: 0.3rem 1rem;
+    padding: 1.6rem 0;
+  }
+  .episode-row .episode-num { grid-area: num; align-self: start; padding-top: 0.3rem; }
+  .episode-row .episode-title { grid-area: title; font-size: 1.25rem; line-height: 1.25; }
+  .episode-row .episode-title.dev { font-size: 0.95rem; }
+  .episode-row .episode-status { grid-area: status; }
+  .episode-row .episode-cta {
+    grid-area: cta;
+    justify-self: stretch;
+    text-align: center;
+    margin-top: 0.4rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.68rem;
+  }
+  .episode-row:hover { padding: 1.6rem 0.8rem; }
+}
 
 /* ---------- Footer ---------- */
 .footer {
