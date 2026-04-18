@@ -13,6 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js" defer></script>
   <script type="importmap">
   {
     "imports": {
@@ -105,43 +106,67 @@
     </div>
 
     <div class="persos-grid">
-      <a href="./personnages/gabriel.html" class="perso-card reveal">
-        <img src="./assets/img/personnages/gabriel.jpg" alt="Gabriel Janvier" />
-        <div class="perso-info">
-          <div class="perso-first">Gabriel</div>
-          <div class="perso-last">Janvier</div>
-          <div class="perso-role">32 ans · Le rêveur</div>
-          <div class="perso-desc">Pudique, observateur. L'objet qu'Elisa lui a donné ce matin-là a déclenché la fusion. Il porte un secret qu'il ne connaît pas encore.</div>
+      <a href="./personnages/gabriel.html" class="perso-card reveal atropos">
+        <div class="atropos-scale">
+          <div class="atropos-rotate">
+            <div class="atropos-inner">
+              <img src="./assets/img/personnages/gabriel.jpg" alt="Gabriel Janvier" data-atropos-offset="-4" />
+              <div class="perso-info" data-atropos-offset="6">
+                <div class="perso-first">Gabriel</div>
+                <div class="perso-last">Janvier</div>
+                <div class="perso-role">32 ans · Le rêveur</div>
+                <div class="perso-desc">Pudique, observateur. L'objet qu'Elisa lui a donné ce matin-là a déclenché la fusion. Il porte un secret qu'il ne connaît pas encore.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </a>
 
-      <a href="./personnages/daniel.html" class="perso-card reveal">
-        <img src="./assets/img/personnages/daniel.jpg" alt="Daniel Jasner" />
-        <div class="perso-info">
-          <div class="perso-first">Daniel</div>
-          <div class="perso-last">Jasner</div>
-          <div class="perso-role">44 ans · Le physicien</div>
-          <div class="perso-desc">Spécialiste des systèmes quantiques. Son appareil expérimental a fusionné avec l'objet de Gabriel. Il cherche la logique derrière le chaos.</div>
+      <a href="./personnages/daniel.html" class="perso-card reveal atropos">
+        <div class="atropos-scale">
+          <div class="atropos-rotate">
+            <div class="atropos-inner">
+              <img src="./assets/img/personnages/daniel.jpg" alt="Daniel Jasner" data-atropos-offset="-4" />
+              <div class="perso-info" data-atropos-offset="6">
+                <div class="perso-first">Daniel</div>
+                <div class="perso-last">Jasner</div>
+                <div class="perso-role">44 ans · Le physicien</div>
+                <div class="perso-desc">Spécialiste des systèmes quantiques. Son appareil expérimental a fusionné avec l'objet de Gabriel. Il cherche la logique derrière le chaos.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </a>
 
-      <a href="./personnages/solange.html" class="perso-card reveal">
-        <img src="./assets/img/personnages/solange.jpg" alt="Solange Rocheval" />
-        <div class="perso-info">
-          <div class="perso-first">Solange</div>
-          <div class="perso-last">Rocheval</div>
-          <div class="perso-role">35 ans · La commandante</div>
-          <div class="perso-desc">Officière militaire, seule survivante de son monde. Protectrice, forte, pudique sur ses émotions. Aucune variante d'elle n'existe dans d'autres univers.</div>
+      <a href="./personnages/solange.html" class="perso-card reveal atropos">
+        <div class="atropos-scale">
+          <div class="atropos-rotate">
+            <div class="atropos-inner">
+              <img src="./assets/img/personnages/solange.jpg" alt="Solange Rocheval" data-atropos-offset="-4" />
+              <div class="perso-info" data-atropos-offset="6">
+                <div class="perso-first">Solange</div>
+                <div class="perso-last">Rocheval</div>
+                <div class="perso-role">35 ans · La commandante</div>
+                <div class="perso-desc">Officière militaire, seule survivante de son monde. Protectrice, forte, pudique sur ses émotions. Aucune variante d'elle n'existe dans d'autres univers.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </a>
 
-      <a href="./personnages/lara.html" class="perso-card reveal">
-        <img src="./assets/img/personnages/lara.jpg" alt="Lara Rivolet" />
-        <div class="perso-info">
-          <div class="perso-first">Lara</div>
-          <div class="perso-last">Rivolet</div>
-          <div class="perso-role">29 ans · La biologiste</div>
-          <div class="perso-desc">Douce, intuitive. Elle porte le poids d'un frère disparu. Elle rejoint le bus malgré elle, mais ne panique pas : elle observe.</div>
+      <a href="./personnages/lara.html" class="perso-card reveal atropos">
+        <div class="atropos-scale">
+          <div class="atropos-rotate">
+            <div class="atropos-inner">
+              <img src="./assets/img/personnages/lara.jpg" alt="Lara Rivolet" data-atropos-offset="-4" />
+              <div class="perso-info" data-atropos-offset="6">
+                <div class="perso-first">Lara</div>
+                <div class="perso-last">Rivolet</div>
+                <div class="perso-role">29 ans · La biologiste</div>
+                <div class="perso-desc">Douce, intuitive. Elle porte le poids d'un frère disparu. Elle rejoint le bus malgré elle, mais ne panique pas : elle observe.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </a>
     </div>
@@ -464,5 +489,6 @@
 <script type="module" src="./js/vortex.js"></script>
 <script src="./js/ambient.js"></script>
 <script src="./js/enhance.js"></script>
+<script src="./js/enhance2.js"></script>
 </body>
 </html>
