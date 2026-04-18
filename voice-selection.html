@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Bus — Sélection des voix</title>
+  <meta name="theme-color" content="#050810" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <style>
+    body { cursor: auto; }
+    .cursor, .cursor-glow { display: none !important; }
+    .vs-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 2rem 10rem;
+    }
+    .vs-page h1 {
+      font-family: var(--serif-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .vs-page .intro {
+      color: var(--text-mute);
+      font-family: var(--serif-read);
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 4rem;
+      max-width: 620px;
+    }
+    .role-block {
+      margin-bottom: 4rem;
+      border-top: 1px solid var(--line-strong);
+      padding-top: 2rem;
+    }
+    .role-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+    .role-name {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .role-desc {
+      font-family: var(--serif-read);
+      color: var(--text-mute);
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+    .role-line {
+      font-family: var(--serif-display);
+      font-size: 1.2rem;
+      color: var(--text);
+      margin: 1rem 0 2rem;
+      padding: 1rem 1.2rem;
+      border-left: 2px solid var(--accent);
+      background: rgba(79, 168, 255, 0.04);
+    }
+    .candidates {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .candidate {
+      padding: 1.2rem;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      border-radius: 4px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .candidate:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .candidate .cand-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+    .candidate .cand-sub {
+      font-family: var(--serif-read);
+      font-style: italic;
+      color: var(--text-mute);
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+    }
+    .candidate audio {
+      width: 100%;
+      filter: invert(0.9) hue-rotate(170deg);
+    }
+    .pick-form {
+      margin-top: 5rem;
+      padding: 2rem;
+      border: 1px solid var(--accent);
+      background: rgba(79, 168, 255, 0.03);
+      border-radius: 4px;
+    }
+    .pick-form h2 {
+      font-family: var(--mono);
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .pick-form p {
+      font-family: var(--serif-read);
+      color: var(--text-mute);
+      line-height: 1.7;
+    }
+    .pick-form pre {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg-deep);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent-soft);
+      border-radius: 4px;
+      white-space: pre-wrap;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 3rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-mute);
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<main class="vs-page">
+  <a href="./index.html" class="back-link">← Retour au site</a>
+
+  <h1>Sélection des voix</h1>
+  <p class="intro">
+    5 rôles (narrateur + 4 personnages), chacun avec 2-3 voix candidates ElevenLabs
+    (modèle multilingual_v2, FR natif). Écoute chaque carte, choisis ta préférée
+    par rôle, puis dis-moi tes 5 picks en chat — je regénérerai ensuite un dialogue
+    complet avec tes voix élues.
+  </p>
+
+  <!-- NARRATEUR -->
+  <div class="role-block">
+    <div class="role-head">
+      <span class="role-name">Narrateur</span>
+      <span class="role-desc">Féminine grave, posée, littéraire.</span>
+    </div>
+    <div class="role-line">
+      « Le bus avait cessé de vibrer. Dehors, une lumière orange saturait les vitres. Aucun des quatre ne parla pendant une longue seconde. »
+    </div>
+    <div class="candidates">
+      <div class="candidate">
+        <div class="cand-label">Alice</div>
+        <div class="cand-sub">Claire, posée</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_alice.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Matilda</div>
+        <div class="cand-sub">Chaleureuse</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/narrateur_matilda.mp3"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- GABRIEL -->
+  <div class="role-block">
+    <div class="role-head">
+      <span class="role-name">Gabriel Janvier</span>
+      <span class="role-desc">32 ans, pudique, observateur, légèrement hésitant.</span>
+    </div>
+    <div class="role-line">
+      « Qu'est-ce que tu veux dire par 'changé' ? »
+    </div>
+    <div class="candidates">
+      <div class="candidate">
+        <div class="cand-label">Liam</div>
+        <div class="cand-sub">Jeune, naturel</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_liam.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Charlie</div>
+        <div class="cand-sub">Décontracté</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_charlie.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Chris</div>
+        <div class="cand-sub">Amical</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/gabriel_chris.mp3"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- DANIEL -->
+  <div class="role-block">
+    <div class="role-head">
+      <span class="role-name">Daniel Jasner</span>
+      <span class="role-desc">44 ans, physicien, analytique, articulée.</span>
+    </div>
+    <div class="role-line">
+      « On n'est plus sur Terre. Les constantes physiques ont changé. »
+    </div>
+    <div class="candidates">
+      <div class="candidate">
+        <div class="cand-label">George</div>
+        <div class="cand-sub">Mature, calme</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_george.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Daniel</div>
+        <div class="cand-sub">Grave, posé</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_daniel.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Bill</div>
+        <div class="cand-sub">Narrateur doc</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/daniel_bill.mp3"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOLANGE -->
+  <div class="role-block">
+    <div class="role-head">
+      <span class="role-name">Solange Rocheval</span>
+      <span class="role-desc">35 ans, commandante militaire, ferme, coupante.</span>
+    </div>
+    <div class="role-line">
+      « Épargnez-nous la science, Jasner. Où est la sortie ? »
+    </div>
+    <div class="candidates">
+      <div class="candidate">
+        <div class="cand-label">Matilda</div>
+        <div class="cand-sub">Autoritaire</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/solange_matilda.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Laura</div>
+        <div class="cand-sub">Claire, nette</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/solange_laura.mp3"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- LARA -->
+  <div class="role-block">
+    <div class="role-head">
+      <span class="role-name">Lara Rivolet</span>
+      <span class="role-desc">29 ans, biologiste, douce, intuitive.</span>
+    </div>
+    <div class="role-line">
+      « Là. Derrière vous. Vous ne la voyez pas parce qu'elle est à moitié enfouie dans le sol. »
+    </div>
+    <div class="candidates">
+      <div class="candidate">
+        <div class="cand-label">Sarah</div>
+        <div class="cand-sub">Douce</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/lara_sarah.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Lily</div>
+        <div class="cand-sub">Chaleureuse</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/lara_lily.mp3"></audio>
+      </div>
+      <div class="candidate">
+        <div class="cand-label">Jessica</div>
+        <div class="cand-sub">Jeune, posée</div>
+        <audio controls preload="none" src="./assets/audio/voice_samples/lara_jessica.mp3"></audio>
+      </div>
+    </div>
+  </div>
+
+  <div class="pick-form">
+    <h2>Tes choix</h2>
+    <p>
+      Une fois que tu as écouté tous les candidats, donne-moi tes 5 picks au format ci-dessous (en chat) :
+    </p>
+    <pre>narrateur = alice
+gabriel   = liam
+daniel    = george
+solange   = matilda
+lara      = sarah</pre>
+    <p style="margin-top: 1rem; font-size: 0.9rem;">
+      <em>Note : Charlotte (narrateur) et Aria (Solange) étaient candidats mais
+      nécessitent un plan payant ElevenLabs — retirés automatiquement du casting libre.</em>
+    </p>
+  </div>
+</main>
+
+</body>
+</html>
