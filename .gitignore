@@ -3,3 +3,18 @@
 .vscode/
 *.log
 node_modules/
+
+# secrets / env
+.env
+.env.*
+*.pem
+*.key
+*.cert
+secrets/
+.envrc
+
+# macOS Finder duplicates
+* 2.mp3
+* 2.wav
+* 2.png
+* 2.jpg
