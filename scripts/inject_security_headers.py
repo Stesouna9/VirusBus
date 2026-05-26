@@ -27,9 +27,11 @@ CSP = (
     "object-src 'none'; "
     "base-uri 'self'; "
     "form-action 'self'; "
-    "frame-ancestors 'none'; "
-    "upgrade-insecure-requests; "
-    "block-all-mixed-content"
+    "frame-ancestors 'none'"
+    # NOTE: upgrade-insecure-requests + block-all-mixed-content retirés
+    # tant que GitHub Pages n'a pas provisionné le cert Let's Encrypt
+    # pour virusbus.fr (cert actuel = *.github.io = mismatch).
+    # Les remettre dès que https://virusbus.fr/ retourne HTTP 200 sans erreur SSL.
 )
 
 BLOCK = f"""  <!-- security headers (managed by scripts/inject_security_headers.py) -->
