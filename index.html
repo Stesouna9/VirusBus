@@ -552,12 +552,10 @@
 <script src="./js/enhance.js"></script>
 <script src="./js/enhance2.js"></script>
 <script>
-// PWA service worker registration
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('SW error:', e));
-  });
-}
+// PWA SW registration temporarily disabled while we sort out the
+// HTTPS cert provisioning on GitHub Pages. /sw.js is now a killswitch
+// that cleans up any previously-installed SW + caches. Re-enable
+// registration here once cert is valid and PWA is rebuilt.
 </script>
 <!-- Analytics (GoatCounter — gratuit, RGPD-friendly, pas de cookie).
      À activer: crée un compte gratuit sur https://www.goatcounter.com
