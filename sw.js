@@ -1,80 +1,27 @@
-/* ---------- Virus Bus — Service Worker (PWA) ---------- */
-// Stratégie :
-//   - Shell statique (HTML, CSS, JS) : Stale-While-Revalidate (rapide + auto-maj)
-//   - Assets (images, audio MP3, fonts) : Cache-First (long TTL, audio lourd)
-//   - Autres (CDN, API) : Network-First fallback cache
-const VERSION = 'vb-2';
-const SHELL = `virusbus-shell-${VERSION}`;
-const ASSETS = `virusbus-assets-${VERSION}`;
-
-const SHELL_URLS = [
-  '/',
-  '/index.html',
-  '/css/main.css',
-  '/js/ambient.js',
-  '/js/enhance.js',
-  '/js/enhance2.js',
-  '/js/vortex.js',
-  '/js/reader.js',
-  '/js/lightbox.js',
-  '/manifest.webmanifest',
-];
+/* ---------- Virus Bus — Service Worker KILLSWITCH ---------- */
+// Previous SW (vb-1, vb-2) cached HTML with broken CSP (upgrade-insecure-requests
+// while TLS cert not provisioned). This SW unregisters itself + nukes all caches
+// + force-reloads open clients. After this version propagates, users get clean
+// state. PWA can be re-introduced later in a fresh SW.
 
 self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(SHELL);
-    await cache.addAll(SHELL_URLS.map((u) => new Request(u, { cache: 'reload' })));
-    self.skipWaiting();
-  })());
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
-    // Purge des anciennes versions
+    // 1. Wipe every cache
     const keys = await caches.keys();
-    await Promise.all(keys
-      .filter((k) => !k.endsWith(VERSION))
-      .map((k) => caches.delete(k))
-    );
-    await self.clients.claim();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+    // 2. Unregister self
+    await self.registration.unregister();
+    // 3. Reload all controlled clients
+    const clients = await self.clients.matchAll({ type: 'window' });
+    clients.forEach((c) => c.navigate(c.url));
   })());
 });
 
-function isAssetURL(url) {
-  return /\.(png|jpe?g|webp|svg|gif|mp3|m4a|wav|vtt|woff2?|ttf)$/i.test(url.pathname);
-}
-
+// Pass-through for any in-flight requests during activation
 self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-  if (url.origin !== location.origin) return;  // laisse passer CDN
-
-  // Cache-first pour les assets lourds (images, audio)
-  if (isAssetURL(url)) {
-    event.respondWith((async () => {
-      const cache = await caches.open(ASSETS);
-      const cached = await cache.match(req);
-      if (cached) return cached;
-      try {
-        const resp = await fetch(req);
-        if (resp.ok) cache.put(req, resp.clone());
-        return resp;
-      } catch (e) {
-        return cached || Response.error();
-      }
-    })());
-    return;
-  }
-
-  // Stale-while-revalidate pour le shell
-  event.respondWith((async () => {
-    const cache = await caches.open(SHELL);
-    const cached = await cache.match(req);
-    const fetchPromise = fetch(req).then((resp) => {
-      if (resp.ok) cache.put(req, resp.clone());
-      return resp;
-    }).catch(() => cached);
-    return cached || fetchPromise;
-  })());
+  event.respondWith(fetch(event.request));
 });
