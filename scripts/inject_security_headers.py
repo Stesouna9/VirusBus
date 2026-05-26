@@ -15,23 +15,30 @@ ROOT = Path(__file__).resolve().parent.parent
 CSP = (
     "default-src 'self'; "
     "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://gc.zgo.at; "
+    "script-src-elem 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://gc.zgo.at https://giscus.app; "
     "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; "
     "font-src 'self' data: https://fonts.gstatic.com; "
     "img-src 'self' data: https:; "
-    "media-src 'self'; "
-    "connect-src 'self' https://gc.zgo.at; "
+    "media-src 'self' blob:; "
+    "connect-src 'self' https://gc.zgo.at https://api.github.com; "
+    "worker-src 'self'; "
+    "manifest-src 'self'; "
+    "frame-src 'self' https://giscus.app; "
     "object-src 'none'; "
     "base-uri 'self'; "
     "form-action 'self'; "
-    "frame-ancestors 'self'; "
-    "upgrade-insecure-requests"
+    "frame-ancestors 'none'; "
+    "upgrade-insecure-requests; "
+    "block-all-mixed-content"
 )
 
 BLOCK = f"""  <!-- security headers (managed by scripts/inject_security_headers.py) -->
   <meta http-equiv="Content-Security-Policy" content="{CSP}" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+  <meta http-equiv="Permissions-Policy" content="accelerometer=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(self), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(self), xr-spatial-tracking=(), interest-cohort=()" />
   <!-- /security headers -->
 """
 
