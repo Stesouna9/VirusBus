@@ -3,7 +3,7 @@
 //   - Shell statique (HTML, CSS, JS) : Stale-While-Revalidate (rapide + auto-maj)
 //   - Assets (images, audio MP3, fonts) : Cache-First (long TTL, audio lourd)
 //   - Autres (CDN, API) : Network-First fallback cache
-const VERSION = 'vb-1';
+const VERSION = 'vb-2';
 const SHELL = `virusbus-shell-${VERSION}`;
 const ASSETS = `virusbus-assets-${VERSION}`;
 
